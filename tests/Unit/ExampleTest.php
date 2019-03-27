@@ -16,4 +16,11 @@ class ExampleTest extends TestCase
     {
         $this->assertTrue(true);
     }
+
+    public function testWillFail()
+    {
+        // teste
+        $this->assertTrue(true);
+    }
+
 }
