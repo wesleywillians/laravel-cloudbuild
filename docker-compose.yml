@@ -1,0 +1,51 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: wesleywillians/laravel-dev
+    container_name: app-laravel
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      DB_HOST: app-mysql
+      DB_DATABASE: laravel
+      DB_USERNAME: root
+    working_dir: /usr/share/nginx
+    volumes:
+      - ./:/usr/share/nginx
+    networks:
+      - app-network
+
+  #MySQL Service
+  app-mysql:
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local   
